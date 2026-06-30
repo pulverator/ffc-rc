@@ -262,3 +262,26 @@ a {
   letter-spacing: -0.04em;
   color: var(--accent);
 }
+
+
+.project-screenshot{
+  display:block;
+  width:min(92vw, 760px);
+  height:auto;
+  margin:28px auto 0;
+  border-radius:18px;
+  border:1px solid rgba(245,245,244,.16);
+  box-shadow:0 18px 42px rgba(0,0,0,.26);
+}
+
+
+.is-expired .countdown-title{
+  background:linear-gradient(180deg, #ff6b6b, #d93636);
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+}
+
+.is-expired .subtime strong{
+  color:rgba(255, 160, 160, .86);
+}
