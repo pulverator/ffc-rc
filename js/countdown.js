@@ -1,4 +1,5 @@
 const countdownRoot = document.querySelector("[data-target-date]");
+const countMode = countdownRoot?.dataset.countMode || "until";
 const targetDate = new Date(
   countdownRoot?.dataset.targetDate || "2026-09-12T00:00:00+02:00"
 );
@@ -10,10 +11,16 @@ const secondsElement = document.getElementById("seconds");
 
 function updateCountdown() {
   const now = new Date();
-  const rawDifference = targetDate - now;
-  const isExpired = rawDifference < 0;
-  const difference = Math.abs(rawDifference);
 
+  let rawDifference = targetDate - now;
+  let isExpired = rawDifference < 0;
+
+  if (countMode === "since") {
+    rawDifference = now - targetDate;
+    isExpired = false;
+  }
+
+  const difference = Math.abs(rawDifference);
   const totalSeconds = Math.floor(difference / 1000);
   const days = Math.floor(totalSeconds / 86400);
   const hours = Math.floor((totalSeconds % 86400) / 3600);

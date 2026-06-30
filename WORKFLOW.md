@@ -12,7 +12,7 @@ Der aktuelle Stand auf GitHub gilt immer als gemeinsame Arbeitsbasis.
 
 ## Projektstruktur
 
-```
+```text
 index.html
 css/
 js/
@@ -22,13 +22,13 @@ reality-checks/
 
 Bildnamen:
 
-```
+```text
 <seitenname>--<beschreibung>.<ext>
 ```
 
 Beispiele:
 
-```
+```text
 fuellmich--fuelli-schmollt.png
 umbele-town--logo.png
 flacherde--laser.png
@@ -42,7 +42,7 @@ flacherde--laser.png
 
 Arbeitsordner:
 
-```
+```text
 ffc-rc
 ```
 
@@ -76,7 +76,7 @@ git commit -m "Kurze Beschreibung der Änderung"
 
 Beispiele:
 
-```
+```text
 Add Umbele Town
 Add Flat Earth teaser
 Improve hover animation
@@ -94,7 +94,7 @@ Danach ist GitHub Pages automatisch aktuell.
 
 ---
 
-## Zusammenarbeit mit ChatGPT
+## Zusammenarbeit mit KI-Unterstützung
 
 Arbeitsregel:
 
@@ -102,46 +102,93 @@ Arbeitsregel:
 
 Vor einer neuen Aufgabe:
 
-1. Änderungen committen
-2. `git push`
-3. ChatGPT informieren:
+1. Änderungen committen.
+2. Änderungen nach GitHub pushen.
+3. Neue Aufgabe mit folgendem Hinweis starten:
 
 > **Arbeite auf dem aktuellen GitHub-Stand.**
 
-ChatGPT liefert danach nur die geänderten oder neuen Dateien zurück (nicht mehr das komplette Projekt).
+Die Unterstützung liefert danach nur die geänderten oder neuen Dateien zurück, nicht mehr das komplette Projekt.
 
 ---
 
-## Git-Grundbefehle
+## ZIP-Workflow für gelieferte Updates
 
-Status anzeigen
+Gelieferte ZIP-Dateien enthalten **keinen zusätzlichen Projektordner** mehr.
+
+Beispiel:
+
+```text
+css/
+js/
+img/
+reality-checks/
+index.html
+WORKFLOW.md
+```
+
+### Sicherer Import per Terminal
+
+ZIP entpacken, dann den Inhalt mit `ditto` in den Projektordner kopieren.
+
+Beispiel:
+
+```bash
+ditto ~/Downloads/2026-06-30--2209--ffc-rc--add-flacherde/ ~/Library/Mobile\ Documents/com~apple~CloudDocs/20--Schwurbelhausen/ffc-reality-checker/ffc-rc/
+```
+
+`ditto` führt Ordner zusammen und überschreibt Dateien gleichen Namens, löscht aber keine vorhandenen Dateien im Zielordner.
+
+### Wichtig
+
+Nicht komplette Ordner per Finder mit «Ersetzen» über bestehende Ordner ziehen. Das kann bestehende Dateien im Zielordner entfernen.
+
+Nach dem Kopieren immer prüfen:
 
 ```bash
 git status
 ```
 
-Änderungen übernehmen
+---
+
+## Änderungen zurücksetzen
+
+Noch nicht commitete Änderungen können auf den letzten Commit zurückgesetzt werden:
 
 ```bash
-git add .
+git restore .
 ```
 
-Commit erstellen
-
-```bash
-git commit -m "Beschreibung"
-```
-
-GitHub aktualisieren
-
-```bash
-git push
-```
+Untracked files werden dadurch nicht gelöscht. Diese bei Bedarf manuell löschen.
 
 ---
 
-## Ziel
+## Benennung der Update-ZIP-Dateien
 
-GitHub dient als zentrale Projektversion.
+Alle gelieferten ZIP-Dateien verwenden folgendes Schema nach lokaler Projektzeit:
 
-Versionierte ZIP-Dateien (`v19`, `v20` usw.) werden nicht mehr verwendet.
+```text
+YYYY-MM-DD--HHMM--ffc-rc--beschreibung.zip
+```
+
+Beispiele:
+
+```text
+2026-06-30--1845--ffc-rc--add-flacherde.zip
+2026-06-30--1930--ffc-rc--fix-doctype.zip
+2026-07-01--0915--ffc-rc--add-bhakdi.zip
+```
+
+So lassen sich mehrere Updates am gleichen Tag eindeutig unterscheiden.
+
+---
+
+## Projektregeln
+
+- Immer `<!DOCTYPE html>` verwenden.
+- Schweizer Rechtschreibung.
+- Dateinamen nur in Kleinbuchstaben.
+- Wörter mit Bindestrich trennen.
+- Bildnamen: `<seitenname>--<beschreibung>`.
+- Neue Reality Checks als eigene HTML-Datei in `reality-checks/`.
+- GitHub ist immer die Referenz für den aktuellen Projektstand.
