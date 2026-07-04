@@ -137,6 +137,9 @@ Beispiel:
 ditto ~/Downloads/2026-06-30--2209--ffc-rc--add-flacherde/ ~/Library/Mobile\ Documents/com~apple~CloudDocs/20--Schwurbelhausen/ffc-reality-checker/ffc-rc/
 ```
 
+ditto ~/xx--transfer/ .
+
+
 `ditto` führt Ordner zusammen und überschreibt Dateien gleichen Namens, löscht aber keine vorhandenen Dateien im Zielordner.
 
 ### Wichtig
