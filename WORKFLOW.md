@@ -32,6 +32,7 @@ Beispiele:
 fuellmich--fuelli-schmollt.png
 umbele-town--logo.png
 flacherde--laser.png
+telegram--statistik.png
 ```
 
 ---
@@ -60,7 +61,22 @@ Kontrollieren, ob nur die erwarteten Dateien geändert wurden.
 
 ---
 
-### 3. Änderungen übernehmen
+### 3. Änderungen ansehen
+
+```bash
+git diff
+```
+
+Oder gezielt eine Datei prüfen:
+
+```bash
+git diff css/style.css
+git diff reality-checks/umbele-town.html
+```
+
+---
+
+### 4. Änderungen übernehmen
 
 ```bash
 git add .
@@ -68,7 +84,7 @@ git add .
 
 ---
 
-### 4. Commit erstellen
+### 5. Commit erstellen
 
 ```bash
 git commit -m "Kurze Beschreibung der Änderung"
@@ -84,7 +100,7 @@ Improve hover animation
 
 ---
 
-### 5. Änderungen veröffentlichen
+### 6. Änderungen veröffentlichen
 
 ```bash
 git push
@@ -129,16 +145,13 @@ WORKFLOW.md
 
 ### Sicherer Import per Terminal
 
-ZIP entpacken, dann den Inhalt mit `ditto` in den Projektordner kopieren.
+Der Inhalt des entpackten Update-ZIPs wird in den Ordner `xx--transfer` gelegt.
 
-Beispiel:
+Wenn VS Code im Projektordner `ffc-rc` geöffnet ist, genügt danach:
 
 ```bash
-ditto ~/Downloads/2026-06-30--2209--ffc-rc--add-flacherde/ ~/Library/Mobile\ Documents/com~apple~CloudDocs/20--Schwurbelhausen/ffc-reality-checker/ffc-rc/
+ditto ../xx--transfer/ .
 ```
-
-ditto ~/xx--transfer/ .
-
 
 `ditto` führt Ordner zusammen und überschreibt Dateien gleichen Namens, löscht aber keine vorhandenen Dateien im Zielordner.
 
@@ -189,9 +202,12 @@ So lassen sich mehrere Updates am gleichen Tag eindeutig unterscheiden.
 ## Projektregeln
 
 - Immer `<!DOCTYPE html>` verwenden.
+- CSS und JavaScript nicht komprimieren, sondern sauber eingerückt und lesbar halten.
 - Schweizer Rechtschreibung.
 - Dateinamen nur in Kleinbuchstaben.
 - Wörter mit Bindestrich trennen.
 - Bildnamen: `<seitenname>--<beschreibung>`.
 - Neue Reality Checks als eigene HTML-Datei in `reality-checks/`.
-- GitHub ist immer die Referenz für den aktuellen Projektstand.
+- Zahlen ab 10’000 mit typografischem Apostroph als Tausendertrennzeichen schreiben, zum Beispiel `92’553`.
+- Für wiederverwendbare Gestaltung bevorzugt allgemeine Klassen verwenden, zum Beispiel `.data-table`, `.text-thin` oder `.text-light`.
+- Niemals Dateien aus früheren Chat-Versionen oder ZIP-Dateien als Grundlage verwenden. GitHub ist IMMER die Referenz für den aktuellen Projektstand. 
