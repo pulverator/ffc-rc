@@ -1,4 +1,6 @@
-/* Diagramm-Prototyp für social-media-trend-chart.html */
+/* ==========================================================================
+   Diagramm-Container
+   ========================================================================== */
 
 .trend-chart {
   margin: 34px 0 38px;
@@ -30,6 +32,11 @@
   min-height: 340px;
 }
 
+
+/* ==========================================================================
+   SVG und Achsen
+   ========================================================================== */
+
 .trend-chart__svg {
   display: block;
   width: 100%;
@@ -59,6 +66,11 @@
   text-anchor: middle;
 }
 
+
+/* ==========================================================================
+   Linien und Datenpunkte
+   ========================================================================== */
+
 .trend-chart__line {
   fill: none;
   stroke-linecap: round;
@@ -86,6 +98,11 @@
 .trend-chart__point--youtube {
   fill: #59a7ff;
 }
+
+
+/* ==========================================================================
+   Legende und Hinweise
+   ========================================================================== */
 
 .trend-chart__legend {
   display: flex;
@@ -117,12 +134,22 @@
   background: #59a7ff;
 }
 
-.trend-chart__note {
+.trend-chart__note,
+.trend-chart__error {
   margin: 12px 0 0;
   color: rgba(244, 244, 245, 0.48);
   font-size: 0.82rem;
   font-weight: 300;
 }
+
+.trend-chart__error {
+  color: rgba(255, 160, 160, 0.86);
+}
+
+
+/* ==========================================================================
+   Mobile Darstellung
+   ========================================================================== */
 
 @media (max-width: 620px) {
   .trend-chart__canvas {

@@ -3,11 +3,8 @@
 <html lang="de">
 
 <!--
-
 Hosted @: GitHub Pages
-
 A FFC project page
-
 -->
 
 <head>
@@ -21,9 +18,11 @@ A FFC project page
   <link rel="preconnect" href="https://fonts.googleapis.com">
 
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;300;700;800&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="../css/style.css">
+
   <link rel="stylesheet" href="../css/trend-chart.css">
 
   <script defer src="../js/trend-chart.js"></script>
@@ -42,101 +41,64 @@ A FFC project page
 
     <p class="label">Trend nach unten:</p>
 
-    <h1 class="countdown-title">92’360</h1>
+    <!-- Aktuellster Telegram-Wert aus der CSV -->
+    <h1 class="countdown-title" data-latest-telegram>92’360</h1>
 
-    <p class="date">14. Juli 2026</p>
+    <!-- Datum des aktuellsten CSV-Datensatzes -->
+    <p class="date" data-latest-date>14. Juli 2026</p>
 
     <p class="label">Subscribers</p>
+
     <img class="portrait" src="../img/social-media-trend--kurve.png" alt="Telegram-Statistik">
 
     <section class="info-box" aria-labelledby="social-media-hintergrund">
 
       <h2 id="social-media-hintergrund">Quelle und Hintergrund</h2>
+
       <p>Die Zahlen bei bittel.tv sinken. Sein Telegram-Kanal hatte einmal über 100’000 Abonnenten. Inzwischen geht die Zahl kontinuierlich zurück. Wo früher fast täglich coronaverschwörerischer Content produziert wurde, die Fanbubble mit persönlichen Themen und Verschwörungserzählungen bedient wurde und sich der Kanal zum Sprachrohr Reiner Fuellmichs hochgearbeitet hatte, ist nicht mehr viel übrig geblieben.</p>
+
       <p>Das Versprechen «Wir werden immer mehr» wird auf dieser Seite mit aktuellen Zahlen begleitet und in Frage gestellt. Ein paar TG-Werte aus älteren Tagen waren aus Streams herauszulesen. Der Abwärtstrend dauert also schein ein Weilchen an.</p>
 
-      <section class="trend-chart" aria-labelledby="trend-chart-title">
-        <div class="trend-chart__header">
-          <h3 id="trend-chart-title">Entwicklung der Abonnentenzahlen</h3>
-          <p>Das Diagramm liest seine Werte direkt aus der Tabelle unterhalb aus.</p>
-        </div>
+      <p>Bei Youtube steigen die Abozahlen zu meinem Erstaunen. Interessant, wenn man von Roger Bittel immer wieder hört, dass er die Plattform nicht mag und unterstützen möchte, sie aber nach wie vor enorm wichtig für die Reichweite seiner Streams ist. Bin gespannt, wie sich die Werte in nächster Zeit entwickeln.</p>
 
-        <div class="trend-chart__canvas" data-trend-chart>
-          <noscript>Für das Diagramm muss JavaScript aktiviert sein.</noscript>
-        </div>
-      </section>
 
+      <!-- Start: Tabellenkopf bleibt statisch, Tabellenzeilen kommen aus der CSV -->
       <table class="data-table">
-
-        <caption>Aktueller Stand</caption>
-
+        <caption></caption>
         <thead>
-
           <tr>
-
             <th>Datum</th>
-
             <th>Telegram-Abos<br><span class="text-thin">Quelle: <a href="https://tgstat.com/channel/@bitteltv">TGStat</a></span></th>
             <th>Youtube-Abos<br><span class="text-thin">Quelle: <a href="https://www.youtube.com/@bittel_tv">Youtube</a></span></th>
-
           </tr>
-
         </thead>
 
-        <tbody>
-
+        <tbody data-trend-table-body>
+          <!-- Fallback, falls die CSV nicht geladen werden kann -->
           <tr>
-
             <td>14.07.2026</td>
-
             <td>92’360</td>
-
             <td>43’500</td>
-
-          </tr>
-
-          <tr>
-
-            <td>04.07.2026</td>
-
-            <td>92’553</td>
-
-            <td>42’100</td>
-
-          </tr>
-
-          <tr>
-
-            <td>19.05.2025</td>
-
-            <td>98’776</td>
-
-            <td>?</td>
-
-          </tr>
-
-          <tr>
-
-            <td>15.06.2025</td>
-
-            <td>98’281</td>
-
-            <td>?</td>
-
-          </tr>
-
-          <tr>
-
-            <td>25.08.2024</td>
-
-            <td>99’933</td>
-
-            <td>?</td>
-
           </tr>
         </tbody>
 
       </table>
+      <!-- Ende: Dynamische Tabellenzeilen -->
+
+
+      <!-- Start: Diagramm wird dynamisch aus der CSV erzeugt -->
+      <section class="trend-chart" aria-labelledby="trend-chart-title">
+
+        <div
+          class="trend-chart__canvas"
+          data-trend-chart
+          data-source="../data/social-media-trend-data.csv"
+        >
+          <noscript>Für das Diagramm muss JavaScript aktiviert sein.</noscript>
+        </div>
+
+      </section>
+      <!-- Ende: Dynamisches Diagramm -->
 
     </section>
 

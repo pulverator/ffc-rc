@@ -1,3 +1,7 @@
+/* ==========================================================================
+   Variablen
+   ========================================================================== */
+
 :root {
   --bg: #0f172a;
   --fg: rgba(244, 244, 245, 0.62);
@@ -8,6 +12,11 @@
   --accent-bottom: #ff9800;
   --ring: #f5f5f4;
 }
+
+
+/* ==========================================================================
+   Basisformatierung
+   ========================================================================== */
 
 * {
   box-sizing: border-box;
@@ -37,6 +46,11 @@ a {
   text-decoration: none;
 }
 
+
+/* ==========================================================================
+   Kopfbereich und Navigation
+   ========================================================================== */
+
 .site-header {
   width: min(92vw, 1100px);
   margin: 0 auto;
@@ -50,6 +64,11 @@ a {
   font-weight: 100;
   color: var(--fg);
 }
+
+
+/* ==========================================================================
+   Übersichtsseite
+   ========================================================================== */
 
 .overview {
   width: min(92vw, 1100px);
@@ -74,6 +93,11 @@ a {
   color: var(--accent);
 }
 
+
+/* ==========================================================================
+   Kartenraster und Cards
+   ========================================================================== */
+
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
@@ -86,7 +110,7 @@ a {
 
 .card a {
   display: block;
-  transition: transform .22s ease;
+  transition: transform 0.22s ease;
 }
 
 .card-circle {
@@ -98,30 +122,30 @@ a {
   margin: 0 auto 18px;
   background: rgba(255, 255, 255, 0.06);
   box-shadow:
-    inset 0 0 0 1px rgba(255, 255, 255, .52),
-    0 8px 24px rgba(0, 0, 0, .18);
+    inset 0 0 0 1px rgba(255, 255, 255, 0.52),
+    0 8px 24px rgba(0, 0, 0, 0.18);
   display: grid;
   place-items: center;
   transition:
-    transform .22s ease,
-    border-color .22s ease,
-    box-shadow .22s ease,
-    background-color .22s ease;
+    transform 0.22s ease,
+    border-color 0.22s ease,
+    box-shadow 0.22s ease,
+    background-color 0.22s ease;
 }
 
 .card-circle img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform .28s ease;
+  transition: transform 0.28s ease;
 }
 
 .card:hover .card-circle {
   transform: none;
   border-color: #ffb22c;
   box-shadow:
-    inset 0 0 0 1px rgba(255,178,44,.85),
-    0 14px 30px rgba(0,0,0,.28);
+    inset 0 0 0 1px rgba(255, 178, 44, 0.85),
+    0 14px 30px rgba(0, 0, 0, 0.28);
 }
 
 .card:hover .card-circle img {
@@ -144,6 +168,11 @@ a {
   font-weight: 100;
   color: var(--fg);
 }
+
+
+/* ==========================================================================
+   Counter und Kennzahlen
+   ========================================================================== */
 
 .countdown-page {
   display: grid;
@@ -195,6 +224,30 @@ a {
   line-height: 1.1;
 }
 
+.date {
+  margin: 0;
+  font-size: clamp(1.25rem, 3vw, 2rem);
+  color: var(--fg);
+  font-weight: 100;
+  letter-spacing: -0.02em;
+}
+
+.is-expired .countdown-title {
+  background: linear-gradient(180deg, #ff6b6b, #d93636);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.is-expired .subtime strong {
+  color: rgba(255, 160, 160, 0.86);
+}
+
+
+/* ==========================================================================
+   Kreis- und Inhaltsbilder
+   ========================================================================== */
+
 .portrait {
   display: block;
   width: clamp(115px, 21vw, 180px);
@@ -204,30 +257,27 @@ a {
   border-radius: 50%;
   border: 6px solid var(--ring);
   box-shadow:
-    inset 0 0 0 1px rgba(255, 255, 255, .52),
-    0 8px 24px rgba(0,0,0,.18);
+    inset 0 0 0 1px rgba(255, 255, 255, 0.52),
+    0 8px 24px rgba(0, 0, 0, 0.18);
   margin: clamp(22px, 5vh, 44px) auto clamp(22px, 5vh, 40px);
 }
 
-.date {
-  margin: 0;
-  font-size: clamp(1.25rem, 3vw, 2rem);
-  color: var(--fg);
-  font-weight: 100;
-  letter-spacing: -0.02em;
+.project-screenshot {
+  max-width: 100%;
+  border: 1px solid rgba(245, 245, 244, 0.16);
+  border-radius: 18px;
 }
+
+
+/* ==========================================================================
+   Infoboxen und Quellen
+   ========================================================================== */
 
 .source {
   margin-top: 42px;
   font-size: 14px;
   font-weight: 100;
-  color: rgba(244,244,245,.5);
-}
-
-.project-screenshot {
-  max-width: 100%;
-  border: 1px solid rgba(245,245,244,.16);
-  border-radius: 18px;
+  color: rgba(244, 244, 245, 0.5);
 }
 
 .info-box {
@@ -235,11 +285,11 @@ a {
   margin: clamp(34px, 7vh, 60px) auto 0;
   padding: clamp(22px, 4vw, 34px);
   text-align: left;
-  color: rgba(244,244,245,.68);
-  background: rgba(255,255,255,.055);
-  border: 1px solid rgba(245,245,244,.14);
+  color: rgba(244, 244, 245, 0.68);
+  background: rgba(255, 255, 255, 0.055);
+  border: 1px solid rgba(245, 245, 244, 0.14);
   border-radius: 22px;
-  box-shadow: 0 18px 42px rgba(0,0,0,.22);
+  box-shadow: 0 18px 42px rgba(0, 0, 0, 0.22);
 }
 
 .info-box h2 {
@@ -268,6 +318,11 @@ a {
   text-underline-offset: 3px;
 }
 
+
+/* ==========================================================================
+   Tabellen
+   ========================================================================== */
+
 .data-table {
   width: 100%;
   margin-top: 24px;
@@ -285,7 +340,7 @@ a {
 .data-table th,
 .data-table td {
   padding: 12px 0;
-  border-bottom: 1px solid rgba(245,245,244,.12);
+  border-bottom: 1px solid rgba(245, 245, 244, 0.12);
   text-align: left;
   vertical-align: top;
 }
@@ -296,9 +351,14 @@ a {
 }
 
 .data-table td {
-  color: rgba(244,244,245,.68);
+  color: rgba(244, 244, 245, 0.68);
   font-weight: 300;
 }
+
+
+/* ==========================================================================
+   Utility-Klassen
+   ========================================================================== */
 
 .text-thin {
   font-weight: 100;
@@ -306,15 +366,4 @@ a {
 
 .text-light {
   font-weight: 300;
-}
-
-.is-expired .countdown-title {
-  background: linear-gradient(180deg, #ff6b6b, #d93636);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
-
-.is-expired .subtime strong {
-  color: rgba(255, 160, 160, .86);
 }

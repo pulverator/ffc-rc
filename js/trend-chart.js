@@ -1,42 +1,148 @@
+/* ==========================================================================
+   Elemente und Datenquelle
+   ========================================================================== */
+
 const chartRoot = document.querySelector("[data-trend-chart]");
-const sourceTable = document.querySelector(".data-table");
+const tableBody = document.querySelector("[data-trend-table-body]");
+const latestTelegramElement = document.querySelector("[data-latest-telegram]");
+const latestDateElement = document.querySelector("[data-latest-date]");
 
-if (chartRoot && sourceTable) {
-  const rows = [...sourceTable.querySelectorAll("tbody tr")];
+const dataSource = chartRoot?.dataset.source;
 
-  const parseDate = (value) => {
-    const [day, month, year] = value.trim().split(".").map(Number);
-    return new Date(year, month - 1, day);
-  };
 
-  const parseNumber = (value) => {
-    const cleanedValue = value
-      .trim()
-      .replace(/[’'\s]/g, "");
+/* ==========================================================================
+   Hilfsfunktionen
+   ========================================================================== */
 
-    if (!/^\d+$/.test(cleanedValue)) {
-      return null;
-    }
+const parseCsv = (csvText) => {
+  const lines = csvText
+    .trim()
+    .split(/\r?\n/)
+    .filter(Boolean);
 
-    return Number(cleanedValue);
-  };
+  const [headerLine, ...dataLines] = lines;
+  const headers = headerLine.split(",").map((header) => header.trim());
 
-  const formatNumber = (value) =>
-    new Intl.NumberFormat("de-CH").format(value).replace(/’/g, "’");
+  return dataLines
+    .map((line) => {
+      const values = line.split(",").map((value) => value.trim());
 
-  const data = rows
-    .map((row) => {
-      const cells = row.querySelectorAll("td");
-
-      return {
-        label: cells[0]?.textContent.trim() ?? "",
-        date: parseDate(cells[0]?.textContent ?? ""),
-        telegram: parseNumber(cells[1]?.textContent ?? ""),
-        youtube: parseNumber(cells[2]?.textContent ?? "")
-      };
+      return headers.reduce((item, header, index) => {
+        item[header] = values[index] ?? "";
+        return item;
+      }, {});
     })
+    .map((item) => ({
+      date: new Date(`${item.date}T00:00:00`),
+      isoDate: item.date,
+      telegram: parseNumber(item.telegram),
+      youtube: parseNumber(item.youtube)
+    }))
     .filter((item) => !Number.isNaN(item.date.getTime()))
     .sort((a, b) => a.date - b.date);
+};
+
+const parseNumber = (value) => {
+  const cleanedValue = String(value)
+    .trim()
+    .replace(/[’'\s]/g, "");
+
+  if (!/^\d+$/.test(cleanedValue)) {
+    return null;
+  }
+
+  return Number(cleanedValue);
+};
+
+const formatNumber = (value) => {
+  if (!Number.isFinite(value)) {
+    return "–";
+  }
+
+  return new Intl.NumberFormat("de-CH")
+    .format(value)
+    .replace(/'/g, "’");
+};
+
+const formatDate = (date) =>
+  new Intl.DateTimeFormat("de-CH", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric"
+  }).format(date);
+
+const formatLongDate = (date) =>
+  new Intl.DateTimeFormat("de-CH", {
+    day: "numeric",
+    month: "long",
+    year: "numeric"
+  }).format(date);
+
+
+/* ==========================================================================
+   Tabelle aus CSV erzeugen
+   ========================================================================== */
+
+const renderTable = (data) => {
+  if (!tableBody) {
+    return;
+  }
+
+  const descendingData = [...data].sort((a, b) => b.date - a.date);
+
+  tableBody.innerHTML = descendingData
+    .map((item) => `
+      <tr>
+        <td>${formatDate(item.date)}</td>
+        <td>${formatNumber(item.telegram)}</td>
+        <td>${formatNumber(item.youtube)}</td>
+      </tr>
+    `)
+    .join("");
+};
+
+
+/* ==========================================================================
+   Aktuellsten Wert im Seitenkopf einsetzen
+   ========================================================================== */
+
+const renderLatestValue = (data) => {
+  const latestItem = data.at(-1);
+
+  if (!latestItem) {
+    return;
+  }
+
+  if (latestTelegramElement) {
+    latestTelegramElement.textContent = formatNumber(latestItem.telegram);
+  }
+
+  if (latestDateElement) {
+    latestDateElement.textContent = formatLongDate(latestItem.date);
+  }
+};
+
+
+/* ==========================================================================
+   Diagrammdaten vorbereiten
+   ========================================================================== */
+
+const createScale = (values) => {
+  const minimum = Math.min(...values);
+  const maximum = Math.max(...values);
+  const range = maximum - minimum || 1;
+  const padding = range * 0.16;
+
+  return {
+    minimum: minimum - padding,
+    maximum: maximum + padding
+  };
+};
+
+const renderChart = (data) => {
+  if (!chartRoot) {
+    return;
+  }
 
   const telegramValues = data
     .map((item) => item.telegram)
@@ -46,8 +152,18 @@ if (chartRoot && sourceTable) {
     .map((item) => item.youtube)
     .filter(Number.isFinite);
 
+  if (telegramValues.length === 0 || youtubeValues.length === 0) {
+    chartRoot.innerHTML = `
+      <p class="trend-chart__error">
+        Für das Diagramm sind noch nicht genügend Daten vorhanden.
+      </p>
+    `;
+    return;
+  }
+
   const width = 720;
   const height = 360;
+
   const margin = {
     top: 28,
     right: 68,
@@ -57,18 +173,6 @@ if (chartRoot && sourceTable) {
 
   const plotWidth = width - margin.left - margin.right;
   const plotHeight = height - margin.top - margin.bottom;
-
-  const createScale = (values) => {
-    const minimum = Math.min(...values);
-    const maximum = Math.max(...values);
-    const range = maximum - minimum || 1;
-    const padding = range * 0.16;
-
-    return {
-      minimum: minimum - padding,
-      maximum: maximum + padding
-    };
-  };
 
   const telegramScale = createScale(telegramValues);
   const youtubeScale = createScale(youtubeValues);
@@ -89,7 +193,7 @@ if (chartRoot && sourceTable) {
     return margin.top + plotHeight - ratio * plotHeight;
   };
 
-  const buildPath = (key, scale) => {
+  const buildSeries = (key, scale) => {
     const points = data
       .map((item, index) => {
         const value = item[key];
@@ -102,7 +206,7 @@ if (chartRoot && sourceTable) {
           x: xPosition(index),
           y: yPosition(value, scale),
           value,
-          label: item.label
+          label: formatDate(item.date)
         };
       })
       .filter(Boolean);
@@ -119,8 +223,13 @@ if (chartRoot && sourceTable) {
     };
   };
 
-  const telegramSeries = buildPath("telegram", telegramScale);
-  const youtubeSeries = buildPath("youtube", youtubeScale);
+  const telegramSeries = buildSeries("telegram", telegramScale);
+  const youtubeSeries = buildSeries("youtube", youtubeScale);
+
+
+/* ==========================================================================
+   SVG-Elemente erzeugen
+   ========================================================================== */
 
   const gridSteps = 4;
 
@@ -144,12 +253,14 @@ if (chartRoot && sourceTable) {
         x2="${width - margin.right}"
         y2="${y}"
       />
+
       <text
         class="trend-chart__axis-label"
         x="${margin.left - 10}"
         y="${y + 4}"
         text-anchor="end"
       >${formatNumber(Math.round(telegramValue))}</text>
+
       <text
         class="trend-chart__axis-label"
         x="${width - margin.right + 10}"
@@ -165,7 +276,7 @@ if (chartRoot && sourceTable) {
         class="trend-chart__date-label"
         x="${xPosition(index)}"
         y="${height - 28}"
-      >${item.label}</text>
+      >${formatDate(item.date)}</text>
     `)
     .join("");
 
@@ -183,6 +294,11 @@ if (chartRoot && sourceTable) {
       `)
       .join("");
 
+
+/* ==========================================================================
+   Diagramm in den HTML-Platzhalter einsetzen
+   ========================================================================== */
+
   chartRoot.innerHTML = `
     <svg
       class="trend-chart__svg"
@@ -191,9 +307,10 @@ if (chartRoot && sourceTable) {
       aria-labelledby="trend-svg-title trend-svg-description"
     >
       <title id="trend-svg-title">Entwicklung der Abonnentenzahlen</title>
+
       <desc id="trend-svg-description">
         Telegram und Youtube werden mit getrennten Werteskalen dargestellt.
-        Die Werte stammen direkt aus der nachfolgenden Tabelle.
+        Die Werte stammen aus der CSV-Datei.
       </desc>
 
       ${grid}
@@ -205,6 +322,7 @@ if (chartRoot && sourceTable) {
         x2="${margin.left}"
         y2="${height - margin.bottom}"
       />
+
       <line
         class="trend-chart__axis-line"
         x1="${width - margin.right}"
@@ -212,6 +330,7 @@ if (chartRoot && sourceTable) {
         x2="${width - margin.right}"
         y2="${height - margin.bottom}"
       />
+
       <line
         class="trend-chart__axis-line"
         x1="${margin.left}"
@@ -224,6 +343,7 @@ if (chartRoot && sourceTable) {
         class="trend-chart__line trend-chart__line--telegram"
         d="${telegramSeries.path}"
       />
+
       <path
         class="trend-chart__line trend-chart__line--youtube"
         d="${youtubeSeries.path}"
@@ -234,6 +354,7 @@ if (chartRoot && sourceTable) {
         "trend-chart__point--telegram",
         "Telegram"
       )}
+
       ${createPoints(
         youtubeSeries,
         "trend-chart__point--youtube",
@@ -244,6 +365,7 @@ if (chartRoot && sourceTable) {
     </svg>
 
     <div class="trend-chart__legend">
+
       <span class="trend-chart__legend-item">
         <span
           class="trend-chart__legend-marker trend-chart__legend-marker--telegram"
@@ -257,10 +379,46 @@ if (chartRoot && sourceTable) {
         ></span>
         Youtube, rechte Skala
       </span>
+
     </div>
 
     <p class="trend-chart__note">
-      Fehlende Werte in der Tabelle werden im Diagramm automatisch ausgelassen.
     </p>
   `;
-}
+};
+
+
+/* ==========================================================================
+   CSV laden und Seite initialisieren
+   ========================================================================== */
+
+const initializeTrendPage = async () => {
+  if (!chartRoot || !dataSource) {
+    return;
+  }
+
+  try {
+    const response = await fetch(dataSource);
+
+    if (!response.ok) {
+      throw new Error(`CSV konnte nicht geladen werden: ${response.status}`);
+    }
+
+    const csvText = await response.text();
+    const data = parseCsv(csvText);
+
+    renderLatestValue(data);
+    renderTable(data);
+    renderChart(data);
+  } catch (error) {
+    console.error(error);
+
+    chartRoot.innerHTML = `
+      <p class="trend-chart__error">
+        Die CSV-Daten konnten nicht geladen werden.
+      </p>
+    `;
+  }
+};
+
+initializeTrendPage();
