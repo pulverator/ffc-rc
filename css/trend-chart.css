@@ -1,0 +1,136 @@
+/* Diagramm-Prototyp für social-media-trend-chart.html */
+
+.trend-chart {
+  margin: 34px 0 38px;
+  padding: 20px 0 6px;
+  border-top: 1px solid rgba(245, 245, 244, 0.12);
+  border-bottom: 1px solid rgba(245, 245, 244, 0.12);
+}
+
+.trend-chart__header {
+  margin-bottom: 18px;
+}
+
+.trend-chart__header h3 {
+  margin: 0 0 6px;
+  color: var(--fg-strong);
+  font-size: clamp(1.1rem, 2.6vw, 1.45rem);
+  letter-spacing: -0.03em;
+}
+
+.trend-chart__header p {
+  margin: 0;
+  color: var(--fg);
+  font-size: 0.95rem;
+  font-weight: 300;
+}
+
+.trend-chart__canvas {
+  width: 100%;
+  min-height: 340px;
+}
+
+.trend-chart__svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.trend-chart__grid-line {
+  stroke: rgba(245, 245, 244, 0.10);
+  stroke-width: 1;
+}
+
+.trend-chart__axis-line {
+  stroke: rgba(245, 245, 244, 0.22);
+  stroke-width: 1;
+}
+
+.trend-chart__axis-label,
+.trend-chart__date-label {
+  fill: rgba(244, 244, 245, 0.58);
+  font-family: Inter, sans-serif;
+  font-size: 12px;
+  font-weight: 300;
+}
+
+.trend-chart__date-label {
+  text-anchor: middle;
+}
+
+.trend-chart__line {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 4;
+}
+
+.trend-chart__line--telegram {
+  stroke: #ff9f1c;
+}
+
+.trend-chart__line--youtube {
+  stroke: #59a7ff;
+}
+
+.trend-chart__point {
+  stroke: #0f172a;
+  stroke-width: 2;
+}
+
+.trend-chart__point--telegram {
+  fill: #ff9f1c;
+}
+
+.trend-chart__point--youtube {
+  fill: #59a7ff;
+}
+
+.trend-chart__legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+  margin-top: 12px;
+  color: rgba(244, 244, 245, 0.66);
+  font-size: 0.9rem;
+  font-weight: 300;
+}
+
+.trend-chart__legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.trend-chart__legend-marker {
+  width: 22px;
+  height: 4px;
+  border-radius: 999px;
+}
+
+.trend-chart__legend-marker--telegram {
+  background: #ff9f1c;
+}
+
+.trend-chart__legend-marker--youtube {
+  background: #59a7ff;
+}
+
+.trend-chart__note {
+  margin: 12px 0 0;
+  color: rgba(244, 244, 245, 0.48);
+  font-size: 0.82rem;
+  font-weight: 300;
+}
+
+@media (max-width: 620px) {
+  .trend-chart__canvas {
+    min-height: 300px;
+  }
+
+  .trend-chart__axis-label,
+  .trend-chart__date-label {
+    font-size: 10px;
+  }
+}
